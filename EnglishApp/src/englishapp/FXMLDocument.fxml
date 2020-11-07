@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="324.0" prefWidth="332.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="englishapp.FXMLDocumentController">
+   <children>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TRẮC NGHIỆM TIẾNG ANH" />
+      <TextField fx:id="txtContent" promptText="Nội dung câu hỏi" />
+      <ComboBox fx:id="cbCategories" prefWidth="150.0" />
+      <HBox prefHeight="34.0" prefWidth="332.0">
+         <children>
+            <CheckBox fx:id="chkA" mnemonicParsing="false" text="A" />
+            <TextField fx:id="txtA" promptText="A" />
+         </children>
+      </HBox>
+      <HBox layoutX="10.0" layoutY="93.0" prefHeight="34.0" prefWidth="332.0">
+         <children>
+            <CheckBox fx:id="chkB" mnemonicParsing="false" text="B" />
+            <TextField fx:id="txtB" promptText="B" />
+         </children>
+      </HBox>
+      <HBox layoutX="10.0" layoutY="127.0" prefHeight="34.0" prefWidth="332.0">
+         <children>
+            <CheckBox fx:id="chkC" mnemonicParsing="false" text="C" />
+            <TextField fx:id="txtC" promptText="C" />
+         </children>
+      </HBox>
+      <HBox layoutX="10.0" layoutY="161.0" prefHeight="34.0" prefWidth="332.0">
+         <children>
+            <CheckBox fx:id="chkD" mnemonicParsing="false" text="D" />
+            <TextField fx:id="txtD" promptText="D" />
+         </children>
+      </HBox>
+      <Button mnemonicParsing="false" onAction="#addQuestionHandler" text="Thêm câu hỏi" />
+   </children>
+</VBox>
