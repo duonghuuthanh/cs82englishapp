@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="324.0" prefWidth="332.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="englishapp.FXMLDocumentController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="468.0" prefWidth="576.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="englishapp.FXMLDocumentController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TRẮC NGHIỆM TIẾNG ANH" />
       <TextField fx:id="txtContent" promptText="Nội dung câu hỏi" />
@@ -35,5 +35,7 @@
          </children>
       </HBox>
       <Button mnemonicParsing="false" onAction="#addQuestionHandler" text="Thêm câu hỏi" />
+      <TextField fx:id="txtKeyword" promptText="Nhập từ khóa để tìm..." />
+      <TableView fx:id="tbQuestions" prefHeight="158.0" prefWidth="576.0" />
    </children>
 </VBox>
