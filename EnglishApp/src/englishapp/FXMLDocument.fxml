@@ -34,7 +34,12 @@
             <TextField fx:id="txtD" promptText="D" />
          </children>
       </HBox>
-      <Button mnemonicParsing="false" onAction="#addQuestionHandler" text="Thêm câu hỏi" />
+      <HBox>
+         <children>
+            <Button mnemonicParsing="false" onAction="#addQuestionHandler" text="Thêm câu hỏi" />
+            <Button mnemonicParsing="false" onAction="#updateQuestionHandler" text="Cập nhật câu hỏi" />
+         </children>
+      </HBox>
       <TextField fx:id="txtKeyword" promptText="Nhập từ khóa để tìm..." />
       <TableView fx:id="tbQuestions" prefHeight="158.0" prefWidth="576.0" />
    </children>

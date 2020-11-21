@@ -116,7 +116,7 @@ public class QuestionTester {
     }
     
     @Test
-    @Ignore
+//    @Ignore
     public void testSearchWithKeyword() {
         try {
             List<Question> kq = QuestionServices.getQuestions("Question");
@@ -137,6 +137,8 @@ public class QuestionTester {
         List<Choice> choices = new ArrayList<>();
         choices.add(new Choice(UUID.randomUUID().toString(), "A", id, true));
         choices.add(new Choice(UUID.randomUUID().toString(), "B", id, false));
+        choices.add(new Choice(UUID.randomUUID().toString(), "C", id, false));
+        choices.add(new Choice(UUID.randomUUID().toString(), "D", id, false));
         
         QuestionServices.addQuestion(q, choices);
         
@@ -153,8 +155,35 @@ public class QuestionTester {
         } catch (SQLException ex) {
             Logger.getLogger(QuestionTester.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
     }
+    
+    @Test
+    public void testUpdateSuccessful()  {
+//        Question q = tbQuestions.getSelectionModel().getSelectedItem();
+//        q.setContent(txtContent.getText());
+//        q.setCategoryId(cbCategories.getSelectionModel().getSelectedItem().getId());
+        
+        try {                   
+            Question q = QuestionServices.getQuestionById("88ad8bc2-5ad9-4b64-a3d3-b3c195b38f4a");
+            q.setContent("new");
+            q.setCategoryId(4);
+            
+            List<Choice> choices = QuestionServices.getChoicesByQuestionId(q.getId());
+            choices.get(0).setCorrect(false);
+            
+            boolean kq = QuestionServices.updateQuestion(q, choices);
+            Assert.assertTrue(kq);
+            
+            Question q2 = QuestionServices.getQuestionById("88ad8bc2-5ad9-4b64-a3d3-b3c195b38f4a");
+            Assert.assertEquals("new", q2.getContent());
+            Assert.assertEquals(4, q2.getCategoryId());
+            
+            choices = QuestionServices.getChoicesByQuestionId(q.getId());
+            Assert.assertFalse(choices.get(0).isCorrect());
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(QuestionTester.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+            
 }

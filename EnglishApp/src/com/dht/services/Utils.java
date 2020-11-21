@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -33,5 +34,12 @@ public class Utils {
      */
     public static Connection getConn() {
         return conn;
+    }
+    
+    public static Alert getAlert(String content, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setContentText(content);
+        
+        return alert;
     }
 }

@@ -10,6 +10,7 @@ import com.dht.pojo.Choice;
 import com.dht.pojo.Question;
 import com.dht.services.CategoryServices;
 import com.dht.services.QuestionServices;
+import com.dht.services.Utils;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -71,6 +73,34 @@ public class FXMLDocumentController implements Initializable {
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+       
+       tbQuestions.setRowFactory(r -> {
+           TableRow row = new TableRow();
+           row.setOnMouseClicked(evt -> {
+               try {
+                   Question q = tbQuestions.getSelectionModel().getSelectedItem();
+                   txtContent.setText(q.getContent());
+                   
+                   Category cat = CategoryServices.getCategoryById(q.getCategoryId());
+                   cbCategories.getSelectionModel().select(cat);
+                   
+                   List<Choice> choices = QuestionServices.getChoicesByQuestionId(q.getId());
+                   txtA.setText(choices.get(0).getContent());
+                   txtB.setText(choices.get(1).getContent());
+                   txtC.setText(choices.get(2).getContent());
+                   txtD.setText(choices.get(3).getContent());
+                   
+                   chkA.setSelected(choices.get(0).isCorrect());
+                   chkB.setSelected(choices.get(1).isCorrect());
+                   chkC.setSelected(choices.get(2).isCorrect());
+                   chkD.setSelected(choices.get(3).isCorrect());
+               } catch (SQLException ex) {
+                   Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           });
+           
+           return row;
+       });
     }
     
     public void addQuestionHandler(ActionEvent evt) {
@@ -87,14 +117,48 @@ public class FXMLDocumentController implements Initializable {
         choices.add(new Choice(UUID.randomUUID().toString(), 
                 txtD.getText(), q.getId(), chkD.isSelected()));
         
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if (QuestionServices.addQuestion(q, choices) == true) {
-            alert.setContentText("SUCCESSFUL");
+            Utils.getAlert("SUCCESSUL", Alert.AlertType.INFORMATION).show();
+//            alert.setContentText("SUCCESSFUL");
         } else {
-            alert.setContentText("FAILED");
+            Utils.getAlert("FAILED", Alert.AlertType.ERROR).show();
+//            alert.setContentText("FAILED");
         }
         
-        alert.show();
+//        alert.show();
+    }
+    
+    public void updateQuestionHandler(ActionEvent evt) {
+        Question q = tbQuestions.getSelectionModel().getSelectedItem();
+        q.setContent(txtContent.getText());
+        q.setCategoryId(cbCategories.getSelectionModel().getSelectedItem().getId());
+                   
+        try {
+            List<Choice> choices = QuestionServices.getChoicesByQuestionId(q.getId());
+            
+            choices.get(0).setContent(txtA.getText());
+            choices.get(0).setCorrect(chkA.isSelected());
+            
+            choices.get(1).setContent(txtB.getText());
+            choices.get(1).setCorrect(chkB.isSelected());
+            
+            choices.get(2).setContent(txtC.getText());
+            choices.get(2).setCorrect(chkC.isSelected());
+            
+            choices.get(3).setContent(txtD.getText());
+            choices.get(3).setCorrect(chkD.isSelected());
+            
+            if (QuestionServices.updateQuestion(q, choices) == true) {
+                Utils.getAlert("UPDATE SUCCESSUL", Alert.AlertType.INFORMATION).show();
+            } else {
+                Utils.getAlert("UPDATE FAILED", Alert.AlertType.ERROR).show();
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     private void loadQuestions(String kw) throws SQLException {

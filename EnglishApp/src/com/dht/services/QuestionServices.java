@@ -21,26 +21,69 @@ import java.util.logging.Logger;
  * @author Admin
  */
 public class QuestionServices {
+    
+    public static boolean updateQuestion(Question q, List<Choice> choices) {
+        Connection conn = Utils.getConn();
+        try {
+            conn.setAutoCommit(false);
+            String sql = "UPDATE question SET content=?, category_id=? WHERE id=?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            
+            stm.setString(1, q.getContent());
+            stm.setInt(2, q.getCategoryId());
+            stm.setString(3, q.getId());
+
+            int r = stm.executeUpdate();
+            if (r > 0 && choices != null) {
+                for (Choice c: choices) {
+                    sql = "UPDATE choice "
+                            + "SET content=?, question_id=?, is_correct=? "
+                            + "WHERE id=?";
+                    stm = conn.prepareStatement(sql);
+                    
+                    stm.setString(1, c.getContent());
+                    stm.setString(2, q.getId());
+                    stm.setBoolean(3, c.isCorrect());
+                    stm.setString(4, c.getId());
+                    stm.executeUpdate();
+                }
+                
+                conn.commit();
+            
+                return true;
+            }
+            
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+            try {
+                conn.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(QuestionServices.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        
+         return false;
+    }
    
     public static boolean addQuestion(Question q, List<Choice> choices) {
         Connection conn = Utils.getConn();
         try {
             conn.setAutoCommit(false);
-            String sql = "INSERT INTO question(id, content, category_id) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO question(content, category_id, id) VALUES (?, ?, ?)";
             PreparedStatement stm = conn.prepareStatement(sql);
-            stm.setString(1, q.getId());
-            stm.setString(2, q.getContent());
-            stm.setInt(3, q.getCategoryId());
+            stm.setString(1, q.getContent());
+            stm.setInt(2, q.getCategoryId());
+            stm.setString(3, q.getId());
 
             int r = stm.executeUpdate();
             if (r > 0 && choices != null) {
                 for (Choice c: choices) {
-                    sql = "INSERT INTO choice(id, content, question_id, is_correct) VALUES (?, ?, ?, ?)";
+                    sql = "INSERT INTO choice(content, question_id, is_correct, id) VALUES (?, ?, ?, ?)";
                     stm = conn.prepareStatement(sql);
-                    stm.setString(1, c.getId());
-                    stm.setString(2, c.getContent());
-                    stm.setString(3, q.getId());
-                    stm.setBoolean(4, c.isCorrect());
+                    stm.setString(1, c.getContent());
+                    stm.setString(2, q.getId());
+                    stm.setBoolean(3, c.isCorrect());
+                    stm.setString(4, c.getId());
                     stm.executeUpdate();
                 }
                 

@@ -7,6 +7,7 @@ package com.dht.services;
 
 import com.dht.pojo.Category;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -33,5 +34,23 @@ public class CategoryServices {
         }
         
         return kq;
+    }
+    
+    public static Category getCategoryById(int id) throws SQLException {
+        Connection conn = Utils.getConn();
+        PreparedStatement stm = conn.prepareStatement("SELECT * FROM category WHERE id=?");
+        stm.setInt(1, id);
+        
+        ResultSet rs = stm.executeQuery();
+        while (rs.next()) {
+            int idd = rs.getInt("id");
+            String content = rs.getString("name");
+         
+            Category cat = new Category(idd, content);
+            
+            return cat;
+        }
+        
+        return null;
     }
 }
